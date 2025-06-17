@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import ExifParser from 'exif-parser';
+import { exiftool } from 'exiftool-vendored';
 import sharp from 'sharp';
 import archiver from 'archiver';
 import { Readable } from 'stream';
@@ -39,15 +39,29 @@ app.post('/process', upload.array('images'), async (req: Request, res: Response)
       const buffer = file.buffer;
 
       try {
-        const parser = ExifParser.create(buffer);
-        const result = parser.parse();
-        const createDate = result.tags.CreateDate ? new Date(result.tags.CreateDate * 1000) : new Date();
-        const dateString = createDate.toLocaleString();
+        const exifData = await exiftool.read(buffer);
+        const createDate = exifData.CreateDate ? new Date(exifData.CreateDate) : new Date();
+        const dateString = createDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+        const imageWidth = (await sharp(buffer).metadata()).width || 0;
+        const imageHeight = (await sharp(buffer).metadata()).height || 0;
+        const textWidth = dateString.length * 10; // Approximate text width
+        const x = imageWidth - textWidth - 20; // 20px padding from the right edge
+        const y = imageHeight - 30; // 30px padding from the bottom edge
+
+        const svgImage = `
+          <svg width="${imageWidth}" height="${imageHeight}">
+            <style>
+              .title { fill: white; font-size: 20px; font-weight: bold; }
+            </style>
+            <text x="${x}" y="${y}" class="title">${dateString}</text>
+          </svg>
+        `;
 
         const image = sharp(buffer)
           .composite([{
-            input: Buffer.from(`<svg><text x="10" y="20" font-size="16">${dateString}</text></svg>`),
-            blend: 'over'
+            input: Buffer.from(svgImage),
+            blend: 'over',
           }]);
 
         const processedImageBuffer = await image.toBuffer();

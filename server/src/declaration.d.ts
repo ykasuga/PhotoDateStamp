@@ -1,2 +1,2 @@
-declare module 'exif-parser';
+declare module 'exiftool-vendored';
 declare module 'archiver';

@@ -29,3 +29,8 @@
 
 *   `docker compose up --build`: Dockerコンテナを構築および実行するために使用されます。
 *   `npm install`: 依存関係をインストールするために使用されます。
+*   `apk update && apk add fontconfig`: Dockerイメージにfontconfigライブラリをインストールするために使用されます。
+*   `npm install --force --legacy-peer-deps`: 依存関係の競合を解決するために使用されます。
+*   `npm ci`: package-lock.jsonファイルに基づいて依存関係をインストールするために使用されます。
+*   `npm install -g @types/express`: expressの型定義をインストールするために使用されます。
+*   `npm rebuild exiftool-vendored`: exiftool-vendoredモジュールをリビルドするために使用されます。
