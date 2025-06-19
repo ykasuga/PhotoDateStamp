@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import multer from 'multer';
+import cors, { CorsOptions } from 'cors';
+import multer, { FileFilterCallback } from 'multer';
 import { exiftool } from 'exiftool-vendored';
 import sharp from 'sharp';
 import archiver from 'archiver';
@@ -11,6 +12,8 @@ const port = 5002;
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, world!');
@@ -39,8 +42,8 @@ app.post('/process', upload.array('images'), async (req: Request, res: Response)
       const buffer = file.buffer;
 
       try {
-        const exifData = await exiftool.read(buffer);
-        const createDate = exifData.CreateDate ? new Date(exifData.CreateDate) : new Date();
+        const exifData = await exiftool.read(file.originalname);
+        const createDate = exifData.CreateDate ? new Date(String(exifData.CreateDate)) : new Date();
         const dateString = createDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
         const imageWidth = (await sharp(buffer).metadata()).width || 0;

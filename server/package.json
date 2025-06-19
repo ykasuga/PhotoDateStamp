@@ -11,12 +11,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "archiver": "^6.0.1",
     "express": "^4.19.2",
     "exif-parser": "^0.1.12",
     "multer": "^1.4.5-lts.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "exiftool-vendored": "^5.0.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.23",

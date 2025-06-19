@@ -13,6 +13,10 @@
 *   このプロジェクトでは、ローカル開発にDockerとDocker Composeを使用します。
 *   フロントエンドはポート3000で提供されます。
 *   バックエンドはポート5002で提供されます。
+*   バックエンドでは、ESモジュールを使用するために、`tsconfig.json`の`module`オプションを`es6`に設定し、`ts-node -r esm`を使用します。
+
+**技術的な制約:**
+*   バックエンドはポート5002で提供されます。
 
 **技術的な制約:**
 
@@ -34,3 +38,5 @@
 *   `npm ci`: package-lock.jsonファイルに基づいて依存関係をインストールするために使用されます。
 *   `npm install -g @types/express`: expressの型定義をインストールするために使用されます。
 *   `npm rebuild exiftool-vendored`: exiftool-vendoredモジュールをリビルドするために使用されます。
+*   `npm install -g typescript ts-node esm`: TypeScript、ts-node、esmをグローバルにインストールするために使用されます。
+*   `CMD ["ts-node", "-r", "esm", "/app/src/index.ts"]`: Dockerコンテナ内でTypeScriptファイルを`ts-node`で実行するために使用されます。
