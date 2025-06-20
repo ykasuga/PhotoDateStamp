@@ -23,8 +23,6 @@
 
 *   favicon.icoが見つからない
 *   アプリケーションは現在JPEG画像のみをサポートしています。他の画像形式もサポートする必要があります。
-*   `server/src/imageProcessor.ts`は使用されていません。
-*   画像処理ロジックは`server/src/index.ts`と`server/src/imageProcessor.ts`で重複しています。
 *   `server/src/index.ts`のタイムスタンプの座標はハードコードされています。
 *   エラー処理は改善の余地があります。
 
