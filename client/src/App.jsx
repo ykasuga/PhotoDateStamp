@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import FileDropZone from './FileDropZone';
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState(null);
 
   const handleFileChange = (event) => {
-    setSelectedFiles(event.target.files);
+    // event.target.filesがFileListまたは配列の場合に対応
+    const files = event.target.files;
+    setSelectedFiles(Array.isArray(files) ? files : Array.from(files));
   };
 
   const handleUpload = async () => {
@@ -44,7 +47,15 @@ function App() {
   return (
     <>
       <h1>PhotoDateStamp</h1>
-      <input type="file" multiple onChange={handleFileChange} />
+      {/* <input type="file" multiple onChange={handleFileChange} /> */}
+      <FileDropZone onFileDrop={handleFileChange} />
+      {selectedFiles && selectedFiles.length > 0 && (
+        <ul>
+          {selectedFiles.map((file, idx) => (
+            <li key={idx}>{file.name}</li>
+          ))}
+        </ul>
+      )}
       <button onClick={handleUpload}>Upload and Process</button>
     </>
   );
